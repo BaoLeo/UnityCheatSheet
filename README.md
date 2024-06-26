@@ -34,6 +34,7 @@
   - [Rendering materials](#rendering-materials)
   - [Lighting](#lighting)
   - [Coroutine](#coroutine)
+  - [Animation](#animation)
   - [Physics](#physics)
     - [Raycast](#raycast)
     - [Ignore Collision](#ignorecollision)
@@ -731,6 +732,85 @@ Mẹo:
 
 - Coroutine rất hữu ích để xử lý các công việc cần đợi một khoảng thời gian nhất định hoặc cần đợi một điều kiện nào đó hoàn thành.
 - Bạn có thể sử dụng các loại yield khác nhau để kiểm soát thời gian chờ và điều kiện chờ.
+## Animation
+Tạo Animation trong Unity là một công việc dễ dàng. Unity làm cho nó trở nên đơn giản với sự trợ giúp của các điều khiển Animator và Animation Graph. Unity gọi các bộ điều khiển animator để xử lý các hoạt họa nào sẽ phát và khi nào phát chúng. Thành phần animation được sử dụng để phát lại hoạt họa.
+
+Thật đơn giản để tương tác với hoạt họa từ một script. Đầu tiên, bạn phải tham chiếu các animation clip vào thành phần animation. Sau đó, lấy tham chiếu thành phần Animator trong script thông qua phương thức GetComponent hoặc bằng cách làm cho biến đó là public. Cuối cùng, đặt giá trị thuộc tính enabled là true để kích hoạt hoạt họa và false để vô hiệu hóa nó.
+Mã ví dụ:
+```csharp
+[SerializeField] GameObject cube;
+
+void Start() {
+    // Kích hoạt thành phần Animator
+    cube.GetComponent<Animator>().enabled = true;
+
+    // Đặt trigger để bắt đầu hoạt họa
+    cube.GetComponent<Animator>().SetTrigger("Enable");
+
+    // Reset trigger sau khi hoạt họa đã bắt đầu
+    cube.GetComponent<Animator>().ResetTrigger("Enable");
+
+    // Đặt giá trị integer cho Animator parameter
+    cube.GetComponent<Animator>().SetInteger("animId", 1);
+}
+
+```
+Cheat Sheet:
+- Kích hoạt Animator:
+```csharp
+animator.enabled = true;
+```
+- Đặt Trigger:
+```csharp
+animator.SetTrigger("TriggerName");
+```
+- Reset Trigger:
+```csharp
+animator.ResetTrigger("TriggerName");
+```
+- Đặt giá trị Integer:
+```csharp
+animator.SetInteger("ParameterName", value);
+```
+
+Parameter (hay còn gọi là tham số): trong ngữ cảnh của Unity Animator là các biến số mà bạn có thể sử dụng để điều khiển các trạng thái hoạt họa và các chuyển tiếp giữa chúng trong Animator Controller. Các parameter này cho phép bạn tạo ra các hoạt họa phức tạp và phản ứng theo các điều kiện hoặc sự kiện trong trò chơi.
+
+**Các loại parameter trong Animator**
+Unity hỗ trợ bốn loại parameter chính trong Animator:
+
+- Float: Biến số thực, thường được sử dụng để điều khiển các trạng thái hoạt họa liên tục, chẳng hạn như tốc độ di chuyển hoặc góc xoay.
+- Int: Biến số nguyên, thường được sử dụng để điều khiển các trạng thái hoạt họa rời rạc hoặc các điều kiện chuyển tiếp.
+- Bool: Biến số Boolean (true/false), thường được sử dụng để kiểm soát các hoạt họa trạng thái bật/tắt hoặc kích hoạt/dừng.
+- Trigger: Biến số đặc biệt, được sử dụng để kích hoạt một hoạt họa mà không cần quan tâm đến giá trị của biến. Trigger tự động reset sau khi được sử dụng.
+***Cách sử dụng parameter trong Animator***
+Khi bạn tạo một Animator Controller trong Unity, bạn có thể thêm các parameter và sử dụng chúng để điều khiển các trạng thái và chuyển tiếp giữa các trạng thái.
+
+**Ví dụ về việc sử dụng parameter:**
+- Tạo parameter trong Animator:
+  + Mở Animator Controller.
+  + Trong tab Parameters, nhấp vào dấu "+" và chọn loại parameter bạn muốn thêm (Float, Int, Bool, Trigger).
+
+***Sử dụng parameter trong script:***
+```csharp
+[SerializeField] GameObject character;
+
+void Start() {
+    Animator animator = character.GetComponent<Animator>();
+
+    // Đặt giá trị float
+    animator.SetFloat("Speed", 5.0f);
+
+    // Đặt giá trị int
+    animator.SetInteger("Health", 100);
+
+    // Đặt giá trị bool
+    animator.SetBool("IsJumping", true);
+
+    // Đặt trigger
+    animator.SetTrigger("Attack");
+}
+
+```
 ## Physics
 ### Raycast
 Raycast là một kỹ thuật trong lập trình game và đồ họa máy tính được sử dụng để xác định xem có bất kỳ đối tượng nào trong không gian ba chiều giao với một tia (ray) được bắn từ một điểm nhất định theo một hướng nhất định. Trong Unity, raycast thường được sử dụng để phát hiện va chạm, kiểm tra đường thẳng tầm nhìn, và nhiều tác vụ khác liên quan đến phát hiện không gian.
